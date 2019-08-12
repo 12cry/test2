@@ -13,8 +13,8 @@
 </script>
 
 <style>
-    /*@import "colorui/main.css";*/
-    /*@import "colorui/icon.css";*/
+    @import "lib/colorui/main.css";
+    @import "lib/colorui/icon.css";
 
 	/*每个页面公共css */
 </style>

@@ -1,13 +1,39 @@
 <template>
     <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback" :fixed="false">
         <slot></slot>
-        <view class="">
-            <textarea v-model="dataForm.content" placeholder="填写评论" @focus="onFocusContent"/>
-            <button @click="commit">提交</button>
+
+
+        <view class="comment">
+            <input class="bg-white padding-lr" placeholder="填写评论" @focus="openCommentPopup()"/>
+            <!--            <textarea v-model="formData.content" placeholder="填写评论" @focus="openCommentPopup"/>-->
+            <!--            <button @click="commit">提交</button>-->
+        </view>
+
+        <view class="cu-modal" :class="showCommentPopup?'show':''">
+            <view class="cu-dialog">
+                <view class="cu-bar bg-white justify-end">
+                    <view class="content">Modal标题</view>
+                    <view class="action" @tap="hideModal">
+                        <text class="cuIcon-close text-red"></text>
+                    </view>
+                </view>
+                <view class="padding-xl">
+
+                    <input class="bg-white padding-lr" placeholder="填写评论" v-model="formData.content"/>
+                </view>
+                <view class="cu-bar bg-white">
+                    <!--                    <view class="action margin-0 flex-sub text-green " @tap="hideModal">-->
+                    <!--                        <text class="cuIcon-moneybag"></text>-->
+                    <!--                        微信支付-->
+                    <!--                    </view>-->
+                    <view class="action margin-0 flex-sub text-green solid-left" @tap="cancel">取消</view>
+                    <view class="action margin-0 flex-sub  solid-left" @tap="commit">确定</view>
+                </view>
+            </view>
         </view>
         <comment v-for="(item,index) in datalist" :key="index" :nickName="item.nickName" :content="item.content"
                  :commentId="item.id" :children="item.children" :avatarUrl="item.avatarUrl"
-                 :createTime="item.createTime" @afterReply="afterReply"/>
+                 :createTime="item.createTime" @reply="openCommentPopup"/>
     </mescroll-uni>
 </template>
 
@@ -28,9 +54,11 @@
         },
         data() {
             return {
+                showCommentPopup: false,
                 hasNextPage: true,
                 datalist: [],
-                dataForm: {
+                formData: {
+                    pid: null,
                     content: '',
                     nickName: '',
                     avatarUrl: '',
@@ -52,10 +80,9 @@
                     mescroll.endSuccess(1)
                     return
                 }
-                let pageNum = mescroll.num; // 页码, 默认从1开始
-                let pageSize = mescroll.size; // 页长, 默认每页10条
-                query('/comment/query', {page: pageNum, rows: pageSize}).then(res => {
-                    console.log(res)
+                let pageNum = mescroll.num;
+                let pageSize = mescroll.size;
+                query(pageNum, pageSize).then(res => {
                     this.hasNextPage = res.data.hasNextPage
                     // mescroll.endByPage(res.data.size,res.data.pages)
                     this.$nextTick(() => {
@@ -68,25 +95,30 @@
             downCallback(mescroll) {
                 mescroll.endSuccess()
             },
-            afterReply(replyComment) {
-                let comment = this.datalist.find(val => {
-                    return val.id == replyComment.pid
-                })
-                comment.children ? comment.children.unshift(replyComment) : comment.children = [replyComment]
-            },
-            async onFocusContent() {
+            async openCommentPopup(pid) {
                 await this.getUserInfo()
-                this.dataForm.avatarUrl = this.userInfo.avatarUrl
-                this.dataForm.nickName = this.userInfo.nickName
-                this.dataForm.userId = this.userInfo.openid
+                this.formData.avatarUrl = this.userInfo.avatarUrl
+                this.formData.nickName = this.userInfo.nickName
+                this.formData.userId = this.userInfo.openid
+                this.formData.pid = pid
+                this.showCommentPopup = true
             },
             commit() {
-                save(this.dataForm).then(res => {
-                    this.datalist.unshift(res.data.comment)
+                save(this.formData).then(res => {
+                    let comment = res.data.comment
+                    if (comment.pid) {
+                        let parentComment = this.datalist.find(val => {
+                            return val.id == comment.pid
+                        })
+                        parentComment.children ? parentComment.children.unshift(comment) : parentComment.children = [comment]
+                    } else {
+                        this.datalist.unshift(comment)
+                    }
+                    this.showCommentPopup = false
                 })
             },
-            add() {
-                console.log('--add')
+            cancel() {
+                this.showCommentPopup = false
             }
         }
     }
