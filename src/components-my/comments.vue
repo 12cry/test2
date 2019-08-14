@@ -1,40 +1,32 @@
 <template>
-    <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback" :fixed="false">
-        <slot></slot>
-
-
-        <view class="comment">
-            <input class="bg-white padding-lr" placeholder="填写评论" @focus="openCommentPopup()"/>
-            <!--            <textarea v-model="formData.content" placeholder="填写评论" @focus="openCommentPopup"/>-->
-            <!--            <button @click="commit">提交</button>-->
+    <view>
+<!--        <button @click="cancel">tttttG</button>-->
+        <CommentInput v-if="commentInputVisible" @commit="commit" @cancel="cancel"/>
+        <view v-show="!commentInputVisible">
+            <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
+                <slot></slot>
+                <view class="comment">
+                    <input class="bg-white padding-lr" placeholder="填写评论" @focus="toCommentInput()"/>
+                    <!--                        <textarea v-model="formData.content" placeholder="填写评论" @focus="openCommentPopup"/>-->
+                    <!--            <button @click="commit">提交</button>-->
+                </view>
+                <!--            <view class="cu-modal " :class="commentInputVisible?'show':''">-->
+                <!--                <view class="cu-dialog">-->
+                <!--                    <view class="cu-bar bg-white">-->
+                <!--                        <view class="action text-green" @tap="commit">确定</view>-->
+                <!--                        <view class="action text-blue" @tap="cancel">取消</view>-->
+                <!--                    </view>-->
+                <!--                    <view class="text-left margin-top">-->
+                <!--                        <textarea class="bg-white cry_comment" v-model="formData.content" placeholder="填写评论"/>-->
+                <!--                    </view>-->
+                <!--                </view>-->
+                <!--            </view>-->
+                <comment v-for="(item,index) in datalist" :key="index" :nickName="item.nickName" :content="item.content"
+                         :commentId="item.id" :children="item.children" :avatarUrl="item.avatarUrl"
+                         :createTime="item.createTime" @reply="toCommentInput"/>
+            </mescroll-uni>
         </view>
-
-        <view class="cu-modal" :class="showCommentPopup?'show':''">
-            <view class="cu-dialog">
-                <view class="cu-bar bg-white justify-end">
-                    <view class="content">Modal标题</view>
-                    <view class="action" @tap="hideModal">
-                        <text class="cuIcon-close text-red"></text>
-                    </view>
-                </view>
-                <view class="padding-xl">
-
-                    <input class="bg-white padding-lr" placeholder="填写评论" v-model="formData.content"/>
-                </view>
-                <view class="cu-bar bg-white">
-                    <!--                    <view class="action margin-0 flex-sub text-green " @tap="hideModal">-->
-                    <!--                        <text class="cuIcon-moneybag"></text>-->
-                    <!--                        微信支付-->
-                    <!--                    </view>-->
-                    <view class="action margin-0 flex-sub text-green solid-left" @tap="cancel">取消</view>
-                    <view class="action margin-0 flex-sub  solid-left" @tap="commit">确定</view>
-                </view>
-            </view>
-        </view>
-        <comment v-for="(item,index) in datalist" :key="index" :nickName="item.nickName" :content="item.content"
-                 :commentId="item.id" :children="item.children" :avatarUrl="item.avatarUrl"
-                 :createTime="item.createTime" @reply="openCommentPopup"/>
-    </mescroll-uni>
+    </view>
 </template>
 
 <script>
@@ -42,19 +34,20 @@
     import {query, save} from "../api/comment";
     import {mapState, mapMutations, mapActions} from "vuex"
     import MescrollUni from "../lib/mescroll-uni/mescroll-uni.vue";
+    import commentInput from './comment-input'
     // import MescrollUni from "mescroll-uni";
 
     export default {
         name: 'index',
         components: {
-            comment, MescrollUni
+            comment, MescrollUni, commentInput
         },
         computed: {
             ...mapState(['userInfo'])
         },
         data() {
             return {
-                showCommentPopup: false,
+                commentInputVisible: false,
                 hasNextPage: true,
                 datalist: [],
                 formData: {
@@ -84,7 +77,6 @@
                 let pageSize = mescroll.size;
                 query(pageNum, pageSize).then(res => {
                     this.hasNextPage = res.data.hasNextPage
-                    // mescroll.endByPage(res.data.size,res.data.pages)
                     this.$nextTick(() => {
                         mescroll.endSuccess(res.data.size)
                     })
@@ -93,17 +85,21 @@
             },
 
             downCallback(mescroll) {
-                mescroll.endSuccess()
+                mescroll.endSuccess(1)
             },
-            async openCommentPopup(pid) {
+            async toCommentInput(pid) {
                 await this.getUserInfo()
                 this.formData.avatarUrl = this.userInfo.avatarUrl
                 this.formData.nickName = this.userInfo.nickName
                 this.formData.userId = this.userInfo.openid
                 this.formData.pid = pid
-                this.showCommentPopup = true
+                this.commentInputVisible = true
+                // uni.navigateTo({
+                //     url: '/components-my/comment-input'
+                // })
             },
-            commit() {
+            commit(content) {
+                this.formData.content = content
                 save(this.formData).then(res => {
                     let comment = res.data.comment
                     if (comment.pid) {
@@ -114,11 +110,11 @@
                     } else {
                         this.datalist.unshift(comment)
                     }
-                    this.showCommentPopup = false
+                    this.commentInputVisible = false
                 })
             },
             cancel() {
-                this.showCommentPopup = false
+                this.commentInputVisible = false
             }
         }
     }
@@ -127,5 +123,11 @@
 <style scoped>
     .comment {
         margin-top: 20px;
+    }
+
+    .cry_comment {
+        width: 100%;
+        margin: 0;
+        padding: 0;
     }
 </style>

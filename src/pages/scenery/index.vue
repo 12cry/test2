@@ -1,9 +1,15 @@
 <template>
-    <comments>
-        <view class="content">
-            <image class="item" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
-        </view>
-    </comments>
+    <view>
+        <cu-custom bgColor="bg-gradual-pink" :isBack="true">
+            <block slot="backText">返回</block>
+            <block slot="content">表单</block>
+        </cu-custom>
+        <comments>
+            <view class="cry_content">
+                <image class="item" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
+            </view>
+        </comments>
+    </view>
 </template>
 
 <script>
@@ -30,7 +36,7 @@
     }
 </script>
 <style>
-    .content {
+    .cry_content {
         display: flex;
         background-color: #1cbbb4;
         flex-direction: column;
