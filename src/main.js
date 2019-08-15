@@ -1,10 +1,14 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store'
-
+// import licia from 'miniprogram-licia'
+import dateUtil from './utils/dateUtil'
 Vue.prototype.$store = store
 Vue.config.productionTip = false
-
+Vue.filter('dateFormatFilter', function (value) {
+    let d = dateUtil.dateFormat(value,'yyyy-mm-dd HH:MM:ss')
+    return d
+})
 App.mpType = 'app'
 
 import cuCustom from './lib/colorui/components/cu-custom.vue'

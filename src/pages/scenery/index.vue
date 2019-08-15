@@ -1,12 +1,8 @@
 <template>
     <view>
-        <cu-custom bgColor="bg-gradual-pink" :isBack="true">
-            <block slot="backText">返回</block>
-            <block slot="content">表单</block>
-        </cu-custom>
         <comments>
-            <view class="cry_content">
-                <image class="item" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
+            <view class="cry_image_container">
+                <image class="cry_image" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
             </view>
         </comments>
     </view>
@@ -36,15 +32,5 @@
     }
 </script>
 <style>
-    .cry_content {
-        display: flex;
-        background-color: #1cbbb4;
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .item {
-        width: 100%;
-        flex-shrink: 1;
-    }
 </style>

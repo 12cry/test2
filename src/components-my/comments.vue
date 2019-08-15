@@ -1,13 +1,15 @@
 <template>
     <view>
-<!--        <button @click="cancel">tttttG</button>-->
         <CommentInput v-if="commentInputVisible" @commit="commit" @cancel="cancel"/>
         <view v-show="!commentInputVisible">
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
                 <view class="comment">
-                    <input class="bg-white padding-lr" placeholder="填写评论" @focus="toCommentInput()"/>
-                    <!--                        <textarea v-model="formData.content" placeholder="填写评论" @focus="openCommentPopup"/>-->
+<!--                    <view class="cu-form-group margin-top">-->
+                        <button @click="toCommentInput()">填写评论</button>
+                        <!--                    <input class="bg-white padding-lr" placeholder="填写评论" @focus="toCommentInput()"/>-->
+<!--                    </view>-->
+                    <!--                    <textarea class="bg-white " placeholder="填写评论" @focus="openCommentPopup"/>-->
                     <!--            <button @click="commit">提交</button>-->
                 </view>
                 <!--            <view class="cu-modal " :class="commentInputVisible?'show':''">-->

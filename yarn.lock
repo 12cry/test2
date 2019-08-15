@@ -5008,6 +5008,11 @@ minipass@^2.2.1, minipass@^2.3.5:
     safe-buffer "^5.1.2"
     yallist "^3.0.0"
 
+miniprogram-licia@^1.5.8:
+  version "1.5.8"
+  resolved "https://registry.npm.taobao.org/miniprogram-licia/download/miniprogram-licia-1.5.8.tgz#8fff4741d3c997b33121d707236dbf97c29d2710"
+  integrity sha1-j/9HQdPJl7MxIdcHI22/l8KdJxA=
+
 minizlib@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npm.taobao.org/minizlib/download/minizlib-1.2.1.tgz#dd27ea6136243c7c880684e8672bb3a45fd9b614"
