@@ -1,7 +1,7 @@
 <template>
     <view>
         <view class="text-left margin-top-lg">
-            <textarea class="bg-white cry_full_width" v-model="content" placeholder="填写评论"/>
+            <textarea class="bg-white cry_full_width" v-model="formData.content" placeholder="填写评论"/>
         </view>
         <button @tap="commit">提交</button>
         <button @tap="cancel">取消</button>
@@ -9,16 +9,43 @@
 </template>
 
 <script>
+    import {query, save} from "@/api/comment";
+    import {mapState, mapMutations, mapActions} from "vuex"
+
     export default {
         name: "comment-input",
+        computed: {
+            ...mapState(['userInfo'])
+        },
+        props:{
+            pid:null,
+            postId:null
+        },
         data() {
             return {
-                content: ''
+                formData: {
+                    pid: null,
+                    content: '',
+                    nickName: '',
+                    avatarUrl: '',
+                    userId: '',
+                },
             }
+        },
+        created() {
+
+            this.formData.avatarUrl = this.userInfo.avatarUrl
+            this.formData.nickName = this.userInfo.nickName
+            this.formData.userId = this.userInfo.openid
+            this.formData.pid = this.pid
+            this.formData.postId = this.postId
         },
         methods: {
             commit() {
-                this.$emit('commit', this.content)
+
+                save(this.formData).then(res => {
+                    this.$emit('commit', res.data.comment)
+                })
             },
             cancel() {
                 this.$emit('cancel')

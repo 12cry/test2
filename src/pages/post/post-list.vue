@@ -1,15 +1,14 @@
 <template>
     <view>
-        <postInput v-if="postInputVisible" @commit="commit" @cancel="cancel"/>
-        <view v-show="!postInputVisible">
+        <postInput v-if="postInputVisible" @commit="commit" @cancel="closeAll"/>
+        <commentInput :postId="postId" v-if="commentInputVisible" @commit="commentCommit" @cancel="closeAll"/>
+        <view v-show="!postInputVisible&&!commentInputVisible">
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
                 <view class="margin-top">
-                    <button @click="topostInput()">填写评论</button>
+                    <button @click="toPostInput()">发帖</button>
                 </view>
-                <post v-for="(item,index) in datalist" :key="index" :nickName="item.nickName" :content="item.content"
-                      :postId="item.id" :children="item.children" :avatarUrl="item.avatarUrl"
-                      :createTime="item.createTime" @reply="topostInput"/>
+                <post v-for="(item,index) in datalist" :key="index" :data="item" @toCommentInput="toCommentInput"/>
             </mescroll-uni>
         </view>
     </view>
@@ -21,27 +20,20 @@
     import {mapState, mapMutations, mapActions} from "vuex"
     import MescrollUni from "@/lib/mescroll-uni/mescroll-uni.vue";
     import postInput from './post-input'
+    import commentInput from '@/pages/comment/comment-input'
 
     export default {
         name: 'index',
         components: {
-            post, MescrollUni, postInput
-        },
-        computed: {
-            ...mapState(['userInfo'])
+            post, MescrollUni, postInput, commentInput
         },
         data() {
             return {
+                postId: null,
                 postInputVisible: false,
+                commentInputVisible: false,
                 hasNextPage: true,
                 datalist: [],
-                formData: {
-                    pid: null,
-                    content: '',
-                    nickName: '',
-                    avatarUrl: '',
-                    userId: '',
-                },
                 images: [],
                 downOption: {},
             }
@@ -65,35 +57,32 @@
                     this.datalist = this.datalist.concat(res.data.list)
                 })
             },
-
             downCallback(mescroll) {
                 mescroll.endSuccess(1)
             },
-            async topostInput(pid) {
+            async toCommentInput(postId) {
                 await this.getUserInfo()
-                this.formData.avatarUrl = this.userInfo.avatarUrl
-                this.formData.nickName = this.userInfo.nickName
-                this.formData.userId = this.userInfo.openid
-                this.formData.pid = pid
+                this.postId = postId
+                this.commentInputVisible = true
+            },
+            commentCommit(comment) {
+                let parent = this.datalist.find(val => {
+                    return val.id == comment.postId
+                })
+                parent.commentList ? parent.commentList.unshift(comment) : parent.commentList = [comment]
+                this.closeAll()
+            },
+            async toPostInput() {
+                await this.getUserInfo()
                 this.postInputVisible = true
             },
-            commit(content) {
-                this.formData.content = content
-                save(this.formData).then(res => {
-                    let post = res.data.post
-                    if (post.pid) {
-                        let parentpost = this.datalist.find(val => {
-                            return val.id == post.pid
-                        })
-                        parentpost.children ? parentpost.children.unshift(post) : parentpost.children = [post]
-                    } else {
-                        this.datalist.unshift(post)
-                    }
-                    this.postInputVisible = false
-                })
+            commit(post) {
+                this.datalist.unshift(post)
+                this.closeAll()
             },
-            cancel() {
+            closeAll() {
                 this.postInputVisible = false
+                this.commentInputVisible = false
             }
         }
     }

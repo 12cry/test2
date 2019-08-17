@@ -1,15 +1,13 @@
 <template>
     <view>
-        <CommentInput v-if="commentInputVisible" @commit="commit" @cancel="cancel"/>
+        <commentInput :pid="pid" v-if="commentInputVisible" @commit="commit" @cancel="closeAll"/>
         <view v-show="!commentInputVisible">
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
                 <view class="margin-top">
                         <button @click="toCommentInput()">填写评论</button>
                 </view>
-                <comment v-for="(item,index) in datalist" :key="index" :nickName="item.nickName" :content="item.content"
-                         :commentId="item.id" :children="item.children" :avatarUrl="item.avatarUrl"
-                         :createTime="item.createTime" @reply="toCommentInput"/>
+                <comment v-for="(item,index) in datalist" :data="item" :key="index" @toCommentInput="toCommentInput"/>
             </mescroll-uni>
         </view>
     </view>
@@ -32,24 +30,16 @@
         },
         data() {
             return {
+                pid:null,
                 commentInputVisible: false,
                 hasNextPage: true,
                 datalist: [],
-                formData: {
-                    pid: null,
-                    content: '',
-                    nickName: '',
-                    avatarUrl: '',
-                    userId: '',
-                },
                 images: [],
                 downOption: {
-                    // auto:false,//是否在初始化完毕之后自动执行下拉回调callback; 默认true
                 },
             }
         },
         created() {
-            console.log('----create')
         },
         methods: {
             ...mapActions(['getUserInfo']),
@@ -74,16 +64,11 @@
             },
             async toCommentInput(pid) {
                 await this.getUserInfo()
-                this.formData.avatarUrl = this.userInfo.avatarUrl
-                this.formData.nickName = this.userInfo.nickName
-                this.formData.userId = this.userInfo.openid
-                this.formData.pid = pid
+                this.pid = pid
                 this.commentInputVisible = true
             },
-            commit(content) {
-                this.formData.content = content
-                save(this.formData).then(res => {
-                    let comment = res.data.comment
+            commit(comment) {
+
                     if (comment.pid) {
                         let parentComment = this.datalist.find(val => {
                             return val.id == comment.pid
@@ -93,9 +78,8 @@
                         this.datalist.unshift(comment)
                     }
                     this.commentInputVisible = false
-                })
             },
-            cancel() {
+            closeAll() {
                 this.commentInputVisible = false
             }
         }
