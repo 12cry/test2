@@ -1,20 +1,20 @@
 <template>
     <view>
-        <comments>
+        <commentList>
             <view class="cry_image_container">
                 <image class="cry_image" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
             </view>
-        </comments>
+        </commentList>
     </view>
 </template>
 
 <script>
-    import comments from "@/components-my/comments";
+    import commentList from "@/pages/comment/comment-list";
 
     export default {
         name: 'index',
         components: {
-            comments
+            commentList
         },
         data() {
             return {
@@ -31,6 +31,3 @@
         methods: {}
     }
 </script>
-<style>
-
-</style>
