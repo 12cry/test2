@@ -45,16 +45,11 @@
 
             commit() {
 
-                console.log(
-                     this.$refs.imageUpload.fileList
-                )
                 let fileList = this.$refs.imageUpload.fileList
                 let params = Object.assign({}, this.formData, {
                     fileList:fileList
                 })
                 save(params).then(res => {
-                    console.log(res.data)
-
                     this.$emit('commit', res.data.post)
                 })
             },

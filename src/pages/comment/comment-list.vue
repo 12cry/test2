@@ -7,7 +7,7 @@
                 <view class="margin-top">
                         <button @click="toCommentInput()">填写评论</button>
                 </view>
-                <comment v-for="(item,index) in datalist" :data="item" :key="index" @toCommentInput="toCommentInput"/>
+                <comment v-for="(item,index) in datalist" :postData="item" :key="index" @toCommentInput="toCommentInput"/>
             </mescroll-uni>
         </view>
     </view>

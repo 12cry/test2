@@ -2,9 +2,9 @@
     <view>
         <postList>
             <view class="cry_image_container">
-                <image class="cry_image" src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg"
-                       mode="widthFix"/>
+                <image class="cry_image" src="https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg" mode="widthFix"/>
             </view>
+
             <view class="cu-list grid col-3">
                 <view class="cu-item" v-for="(item,index) in subjectData" :key="index" @click="test(index)">
                     <text class="lg text-gray" :class="'cuIcon-' + item.icon"></text>
@@ -20,9 +20,10 @@
     import postList from "@/pages/post/post-list"
 
     import commentList from "@/pages/comment/comment-list";
+
     export default {
         components: {
-            postList,commentList
+            postList, commentList
         },
         data() {
             return {

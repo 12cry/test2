@@ -28,6 +28,8 @@
 </template>
 
 <script>
+    import {url_base} from "@/utils/request";
+
     export default {
         name: "imageUpload",
         data() {
@@ -40,7 +42,7 @@
         methods: {
             upload(filePath) {
                 const uploadTask = uni.uploadFile({
-                    url: 'http://localhost:9090/file/upload', //仅为示例，非真实的接口地址
+                    url: url_base+'/file/upload',
                     filePath: filePath,
                     name: 'file',
                     success: (res) => {
@@ -48,18 +50,6 @@
                         this.fileList.push(JSON.parse(res.data))
                     }
                 });
-
-                uploadTask.onProgressUpdate((res) => {
-                    console.log('上传进度' + res.progress);
-                    console.log('已经上传的数据长度' + res.totalBytesSent);
-                    console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
-
-                    // 测试条件，取消上传任务。
-                    if (res.progress > 50) {
-                        // uploadTask.abort();
-                    }
-                });
-
             },
             ChooseImage() {
                 uni.chooseImage({

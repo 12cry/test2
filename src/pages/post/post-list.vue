@@ -8,7 +8,7 @@
                 <view class="margin-top">
                     <button @click="toPostInput()">发帖</button>
                 </view>
-                <post v-for="(item,index) in datalist" :key="index" :data="item" @toCommentInput="toCommentInput"/>
+                <post v-for="(item,index) in datalist" :key="index" :postData="item" @toCommentInput="toCommentInput"/>
             </mescroll-uni>
         </view>
     </view>
@@ -21,6 +21,8 @@
     import MescrollUni from "@/lib/mescroll-uni/mescroll-uni.vue";
     import postInput from './post-input'
     import commentInput from '@/pages/comment/comment-input'
+
+    import {url_file} from "@/utils/request";
 
     export default {
         name: 'index',
@@ -54,6 +56,11 @@
                     this.$nextTick(() => {
                         mescroll.endSuccess(res.data.size)
                     })
+                    res.data.list.forEach(post => {
+                        post.fileList.forEach(file => {
+                            file.url = url_file + file.name
+                        })
+                    })
                     this.datalist = this.datalist.concat(res.data.list)
                 })
             },
@@ -77,6 +84,9 @@
                 this.postInputVisible = true
             },
             commit(post) {
+                post.fileList.forEach(file => {
+                    file.url = url_file + file.name
+                })
                 this.datalist.unshift(post)
                 this.closeAll()
             },
