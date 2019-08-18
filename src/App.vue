@@ -16,6 +16,7 @@
     @import "lib/colorui/main.css";
     @import "lib/colorui/icon.css";
     @import "static/cry.css";
+    @import "lib/colorui/animation.css";
 
 	/*每个页面公共css */
 </style>

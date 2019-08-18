@@ -1,5 +1,5 @@
 <template>
-    <commentList>
+    <commentList :targetId="2">
         <view class="cry_image_container">
             <image class="cry_image" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
         </view>

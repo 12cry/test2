@@ -1,8 +1,14 @@
 <template>
     <view>
         <view class="text-left ">
-            <input class="bg-white margin-top " v-model="formData.title" placeholder="写标题..."/>
-            <textarea maxlength="2000" class="bg-white cry_full_width margin-top" v-model="formData.content" placeholder="写内容..."/>
+            <view class="padding-sm">
+                <view class="flex flex-wrap justify-around">
+                    <button class="cu-btn margin-sm basis-sm shadow" :class="['bg-blue','animation-shake']">tttttttt</button>
+                </view>
+            </view>
+            <input class="bg-white margin-top " :class="titleV" v-model="formData.title" placeholder="写标题..."/>
+            <!--            <input class="bg-white margin-top " :class="must=='title'?'animation-shake':''" v-model="formData.title" placeholder="写标题..."/>-->
+            <textarea maxlength="2000" :class="contentV" class="bg-white cry_full_width margin-top" v-model="formData.content" placeholder="写内容..."/>
             <image-upload ref="imageUpload"/>
 
         </view>
@@ -15,6 +21,7 @@
     import {mapState, mapMutations, mapActions} from "vuex"
     import {query, save} from "@/api/post";
     import imageUpload from "@/components/imageUpload";
+    import {validate} from "@/utils";
 
     export default {
         name: "post-input",
@@ -26,6 +33,9 @@
         },
         data() {
             return {
+                titleV: '',
+                contentV: '',
+                must: '',
                 formData: {
                     title: '',
                     content: '',
@@ -41,10 +51,11 @@
             this.formData.openid = this.userInfo.openid
         },
         methods: {
+           commit() {
 
-            commit() {
-
-                console.log(this.formData)
+                if (!validate(this,['title','content'],'formData')) {
+                    return
+                }
                 let fileList = this.$refs.imageUpload.fileList
                 let params = Object.assign({}, this.formData, {
                     fileList: fileList
@@ -61,5 +72,4 @@
 </script>
 
 <style scoped>
-
 </style>

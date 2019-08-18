@@ -1,6 +1,6 @@
 <template>
     <view>
-        <commentInput :pid="pid" v-if="commentInputVisible" @commit="commit" @cancel="closeAll"/>
+        <commentInput :target-id="targetId" :pid="pid" v-if="commentInputVisible" @commit="commit" @cancel="closeAll"/>
         <view v-show="!commentInputVisible">
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
@@ -28,6 +28,9 @@
         computed: {
             ...mapState(['userInfo'])
         },
+        props:{
+          targetId:null
+        },
         data() {
             return {
                 pid:null,
@@ -48,9 +51,9 @@
                     mescroll.endSuccess(1)
                     return
                 }
-                let pageNum = mescroll.num;
-                let pageSize = mescroll.size;
-                query(pageNum, pageSize).then(res => {
+                let page = mescroll.num;
+                let rows = mescroll.size;
+                query({page,rows,targetId:this.targetId}).then(res=>{
                     this.hasNextPage = res.data.hasNextPage
                     this.$nextTick(() => {
                         mescroll.endSuccess(res.data.size)
@@ -60,7 +63,8 @@
             },
 
             downCallback(mescroll) {
-                mescroll.endSuccess(1)
+                mescroll.resetUpScroll()
+                // mescroll.endSuccess(1)
             },
             async toCommentInput(pid) {
                 await this.getUserInfo()

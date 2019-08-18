@@ -1,5 +1,5 @@
 <template>
-    <comment-list>
+    <comment-list :targetId="1">
 
         <view class=" text-df padding">肇庆学院为公办全日制综合性本科大学，创办于1970年。
         </view>

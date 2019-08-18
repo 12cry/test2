@@ -51,9 +51,9 @@
                     mescroll.endSuccess(1)
                     return
                 }
-                let pageNum = mescroll.num;
-                let pageSize = mescroll.size;
-                query(pageNum, pageSize).then(res => {
+                let page = mescroll.num;
+                let rows = mescroll.size;
+                query({page,rows}).then(res=>{
                     this.hasNextPage = res.data.hasNextPage
                     this.$nextTick(() => {
                         mescroll.endSuccess(res.data.size)
