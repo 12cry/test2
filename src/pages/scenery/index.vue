@@ -1,11 +1,9 @@
 <template>
-    <view>
-        <commentList>
-            <view class="cry_image_container">
-                <image class="cry_image" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
-            </view>
-        </commentList>
-    </view>
+    <commentList>
+        <view class="cry_image_container">
+            <image class="cry_image" v-for="(item,index) in images" :src="item.src" :key="index" mode="widthFix"/>
+        </view>
+    </commentList>
 </template>
 
 <script>

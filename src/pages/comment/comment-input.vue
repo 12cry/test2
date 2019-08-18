@@ -1,10 +1,10 @@
 <template>
     <view>
         <view class="text-left margin-top-lg">
-            <textarea class="bg-white cry_full_width" v-model="formData.content" placeholder="填写评论"/>
+            <textarea class="bg-white cry_full_width" v-model="formData.content" placeholder="写评论..."/>
         </view>
-        <button @tap="commit">提交</button>
-        <button @tap="cancel">取消</button>
+        <button class="cu-btn block bg-blue margin-sm lg" @tap="commit">提交</button>
+        <button class="cu-btn block bg-blue margin-sm lg" @tap="cancel">取消</button>
     </view>
 </template>
 
@@ -17,9 +17,9 @@
         computed: {
             ...mapState(['userInfo'])
         },
-        props:{
-            pid:null,
-            postId:null
+        props: {
+            pid: null,
+            targetId: null
         },
         data() {
             return {
@@ -38,7 +38,7 @@
             this.formData.nickName = this.userInfo.nickName
             this.formData.userId = this.userInfo.openid
             this.formData.pid = this.pid
-            this.formData.postId = this.postId
+            this.formData.targetId = this.targetId
         },
         methods: {
             commit() {

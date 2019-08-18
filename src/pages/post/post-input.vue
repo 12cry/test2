@@ -1,13 +1,13 @@
 <template>
     <view>
-        <view class="text-left margin-top-lg">
-            <input class="bg-white cry_full_width" v-model="formData.title" placeholder="填写标题"/>
-            <textarea class="bg-white cry_full_width margin-top" v-model="formData.content" placeholder="填写评论"/>
+        <view class="text-left ">
+            <input class="bg-white margin-top " v-model="formData.title" placeholder="写标题..."/>
+            <textarea maxlength="2000" class="bg-white cry_full_width margin-top" v-model="formData.content" placeholder="写内容..."/>
             <image-upload ref="imageUpload"/>
 
         </view>
-        <button @tap="commit">提交</button>
-        <button @tap="cancel">取消</button>
+        <button class="cu-btn block bg-blue margin-sm lg" @tap="commit">提交</button>
+        <button class="cu-btn block bg-blue margin-sm lg" @tap="cancel">取消</button>
     </view>
 </template>
 
@@ -31,7 +31,6 @@
                     content: '',
                     nickName: '',
                     avatarUrl: '',
-                    userId: '',
                 },
                 content: ''
             }
@@ -39,15 +38,16 @@
         created() {
             this.formData.avatarUrl = this.userInfo.avatarUrl
             this.formData.nickName = this.userInfo.nickName
-            this.formData.userId = this.userInfo.openid
+            this.formData.openid = this.userInfo.openid
         },
         methods: {
 
             commit() {
 
+                console.log(this.formData)
                 let fileList = this.$refs.imageUpload.fileList
                 let params = Object.assign({}, this.formData, {
-                    fileList:fileList
+                    fileList: fileList
                 })
                 save(params).then(res => {
                     this.$emit('commit', res.data.post)

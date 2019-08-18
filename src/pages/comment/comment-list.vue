@@ -5,7 +5,7 @@
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
                 <view class="margin-top">
-                        <button @click="toCommentInput()">填写评论</button>
+                        <button class="cu-btn block bg-blue margin-sm lg" @click="toCommentInput()">填写评论</button>
                 </view>
                 <comment v-for="(item,index) in datalist" :postData="item" :key="index" @toCommentInput="toCommentInput"/>
             </mescroll-uni>

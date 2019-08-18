@@ -1,12 +1,12 @@
 <template>
     <view>
         <postInput v-if="postInputVisible" @commit="commit" @cancel="closeAll"/>
-        <commentInput :postId="postId" v-if="commentInputVisible" @commit="commentCommit" @cancel="closeAll"/>
+        <commentInput :targetId="targetId" v-if="commentInputVisible" @commit="commentCommit" @cancel="closeAll"/>
         <view v-show="!postInputVisible&&!commentInputVisible">
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
                 <view class="margin-top">
-                    <button @click="toPostInput()">发帖</button>
+                    <button class="cu-btn block bg-blue margin-sm lg" @click="toPostInput()">发帖</button>
                 </view>
                 <post v-for="(item,index) in datalist" :key="index" :postData="item" @toCommentInput="toCommentInput"/>
             </mescroll-uni>
@@ -31,13 +31,15 @@
         },
         data() {
             return {
-                postId: null,
+                targetId: null,
                 postInputVisible: false,
                 commentInputVisible: false,
                 hasNextPage: true,
                 datalist: [],
                 images: [],
-                downOption: {},
+                downOption: {
+                    auto:false
+                },
             }
         },
         created() {
@@ -65,16 +67,18 @@
                 })
             },
             downCallback(mescroll) {
-                mescroll.endSuccess(1)
+                // this.datalist=[]
+                mescroll.resetUpScroll()
+                // mescroll.endSuccess(1)
             },
-            async toCommentInput(postId) {
+            async toCommentInput(targetId) {
                 await this.getUserInfo()
-                this.postId = postId
+                this.targetId = targetId
                 this.commentInputVisible = true
             },
             commentCommit(comment) {
                 let parent = this.datalist.find(val => {
-                    return val.id == comment.postId
+                    return val.id == comment.targetId
                 })
                 parent.commentList ? parent.commentList.unshift(comment) : parent.commentList = [comment]
                 this.closeAll()

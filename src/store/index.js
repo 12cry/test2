@@ -34,12 +34,19 @@ const store = new Vuex.Store({
             return await new Promise((resolve, reject) => {
                 uni.getUserInfo({
                     success: function (res) {
+                        console.log('-------getUserInfo')
+                        console.log(res)
                         if (state.userInfo) {
                             resolve(state.userInfo)
                         } else {
                             commit('setUserInfo', res.userInfo)
                             resolve(res.userInfo)
                         }
+                    },
+                    fail:function (res) {
+                        console.log('---------getUserInfo---fail')
+                        console.log(res)
+
                     }
                 })
 

@@ -1,5 +1,5 @@
 <template>
-    <view>
+    <comment-list>
 
         <view class=" text-df padding">肇庆学院为公办全日制综合性本科大学，创办于1970年。
         </view>
@@ -28,11 +28,15 @@
             学校坚持“以生为本、以质立校；学术并举，崇术为上”的办学理念，以“厚德、明智、博学、力行”为校训。目前，全体师生在“团结、奋进、求实、创新”的精神激励下，正在为把学校建设成为特色鲜明的高水平应用型综合大学而努力奋斗。
         </view>
 
-    </view>
+    </comment-list>
 </template>
 
 <script>
+    import commentList from "@/pages/comment/comment-list";
     export default {
-        name: "index"
+        name: "index",
+     components:{
+            commentList
+     }
     }
 </script>
