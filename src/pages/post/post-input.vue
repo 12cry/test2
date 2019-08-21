@@ -1,13 +1,7 @@
 <template>
     <view>
         <view class="text-left ">
-            <view class="padding-sm">
-                <view class="flex flex-wrap justify-around">
-                    <button class="cu-btn margin-sm basis-sm shadow" :class="['bg-blue','animation-shake']">tttttttt</button>
-                </view>
-            </view>
             <input class="bg-white margin-top " :class="titleV" v-model="formData.title" placeholder="写标题..."/>
-            <!--            <input class="bg-white margin-top " :class="must=='title'?'animation-shake':''" v-model="formData.title" placeholder="写标题..."/>-->
             <textarea maxlength="2000" :class="contentV" class="bg-white cry_full_width margin-top" v-model="formData.content" placeholder="写内容..."/>
             <image-upload ref="imageUpload"/>
 
@@ -29,7 +23,7 @@
             imageUpload
         },
         computed: {
-            ...mapState(['userInfo'])
+            // ...mapState(['userInfo'])
         },
         data() {
             return {
@@ -39,16 +33,16 @@
                 formData: {
                     title: '',
                     content: '',
-                    nickName: '',
-                    avatarUrl: '',
+                    // nickName: '',
+                    // avatarUrl: '',
                 },
                 content: ''
             }
         },
         created() {
-            this.formData.avatarUrl = this.userInfo.avatarUrl
-            this.formData.nickName = this.userInfo.nickName
-            this.formData.openid = this.userInfo.openid
+            // this.formData.avatarUrl = this.userInfo.avatarUrl
+            // this.formData.nickName = this.userInfo.nickName
+            // this.formData.openid = this.userInfo.openid
         },
         methods: {
            commit() {
@@ -61,7 +55,7 @@
                     fileList: fileList
                 })
                 save(params).then(res => {
-                    this.$emit('commit', res.data.post)
+                    this.$emit('commit', res.data)
                 })
             },
             cancel() {

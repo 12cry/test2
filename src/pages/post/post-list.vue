@@ -7,6 +7,7 @@
                 <slot></slot>
                 <view class="margin-top">
                     <button class="cu-btn block bg-blue margin-sm lg" @click="toPostInput()">发帖</button>
+<!--                    <button class="cu-btn block bg-blue margin-sm lg" @click="test()">test</button>-->
                 </view>
                 <post v-for="(item,index) in datalist" :key="index" :postData="item" @toCommentInput="toCommentInput"/>
             </mescroll-uni>
@@ -17,6 +18,7 @@
 <script>
     import post from "./post";
     import {query, save} from "@/api/post";
+
     import {mapState, mapMutations, mapActions} from "vuex"
     import MescrollUni from "@/lib/mescroll-uni/mescroll-uni.vue";
     import postInput from './post-input'
@@ -38,7 +40,7 @@
                 datalist: [],
                 images: [],
                 downOption: {
-                    auto:false
+                    auto: false
                 },
             }
         },
@@ -53,7 +55,7 @@
                 }
                 let page = mescroll.num;
                 let rows = mescroll.size;
-                query({page,rows}).then(res=>{
+                query({page, rows}).then(res => {
                     this.hasNextPage = res.data.hasNextPage
                     this.$nextTick(() => {
                         mescroll.endSuccess(res.data.size)
@@ -83,8 +85,9 @@
                 parent.commentList ? parent.commentList.unshift(comment) : parent.commentList = [comment]
                 this.closeAll()
             },
+
             async toPostInput() {
-                await this.getUserInfo()
+                // await this.getUserInfo()
                 this.postInputVisible = true
             },
             commit(post) {

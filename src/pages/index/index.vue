@@ -17,7 +17,9 @@
 
     import postList from "@/pages/post/post-list"
 
+    import {login} from "../../api/user";
     import commentList from "@/pages/comment/comment-list";
+    import {mapActions} from "vuex";
 
     export default {
         components: {
@@ -42,8 +44,49 @@
             }
         },
         created() {
+            this.login()
+
         },
         methods: {
+            ...mapActions(['getUserInfo']),
+            async login() {
+                uni.login({
+                    provider: 'weixin',
+                    success: function (loginRes) {
+                        // console.log('---uni-login')
+                        // console.log(loginRes.authResult);
+                    }
+                });
+                let token = uni.getStorageSync('token')
+                if (token) {
+                    console.log('-----------logined')
+                    console.log(token)
+                    return
+                }
+                console.log('------------logining')
+                let _this = this
+                await wx.login({
+                    success(res) {
+                        console.log('---wxlogin--succ')
+                        console.log(res)
+                        let code = res.code
+                        if (code) {
+                            _this.getUserInfo().then(res => {
+                                let data = Object.assign({}, {user: _this.$store.state.userInfo}, {code})
+                                login(data).then(res => {
+                                    console.log('-------mylogin---')
+                                    console.log(res)
+                                    uni.setStorageSync('token', res.data.token)
+                                })
+                            });
+
+                        } else {
+                            console.log('登录失败！' + res.errMsg)
+                        }
+                    }
+                })
+
+            },
             test(index) {
                 let url;
                 console.log(index)
