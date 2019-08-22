@@ -74,15 +74,15 @@
                 // mescroll.endSuccess(1)
             },
             async toCommentInput(targetId) {
-                await this.getUserInfo()
+                // await this.getUserInfo()
                 this.targetId = targetId
                 this.commentInputVisible = true
             },
             commentCommit(comment) {
                 let parent = this.datalist.find(val => {
-                    return val.id == comment.targetId
+                    return val.id === comment.targetId
                 })
-                parent.commentList ? parent.commentList.unshift(comment) : parent.commentList = [comment]
+                parent.commentVOList ? parent.commentVOList.unshift(comment) : parent.commentVOList = [comment]
                 this.closeAll()
             },
 

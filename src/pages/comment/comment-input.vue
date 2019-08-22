@@ -10,14 +10,10 @@
 
 <script>
     import {query, save} from "@/api/comment";
-    import {mapState, mapMutations, mapActions} from "vuex"
     import {validate} from "@/utils";
 
     export default {
         name: "comment-input",
-        computed: {
-            ...mapState(['userInfo'])
-        },
         props: {
             pid: null,
             targetId: null
@@ -26,30 +22,21 @@
             return {
                 contentV:'',
                 formData: {
-                    pid: null,
                     content: '',
-                    nickName: '',
-                    avatarUrl: '',
-                    userId: '',
                 },
             }
         },
         created() {
-
-            this.formData.avatarUrl = this.userInfo.avatarUrl
-            this.formData.nickName = this.userInfo.nickName
-            this.formData.userId = this.userInfo.openid
             this.formData.pid = this.pid
             this.formData.targetId = this.targetId
         },
         methods: {
             commit() {
-
                 if(!validate(this,['content'],'formData')){
                     return
                 }
                 save(this.formData).then(res => {
-                    this.$emit('commit', res.data.comment)
+                    this.$emit('commit', res.data)
                 })
             },
             cancel() {
@@ -58,7 +45,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
