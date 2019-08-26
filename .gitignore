@@ -21,6 +21,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
-/src/pages/comment/comment.vue
 /src/utils/request.js
 /src/pages/post/post.vue
