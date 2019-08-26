@@ -1,6 +1,6 @@
 <template>
     <view>
-        <commentInput :target-id="targetId" :pid="pid" v-if="commentInputVisible" @commit="commit" @cancel="closeAll"/>
+        <commentInput :target-id="postTargetId" :pid="pid" v-if="commentInputVisible" @commit="commit" @cancel="closeAll"/>
         <view v-show="!commentInputVisible">
             <mescroll-uni :down="downOption" @up="upCallback" @down="downCallback">
                 <slot></slot>
@@ -33,6 +33,7 @@
         },
         data() {
             return {
+                postTargetId:null,
                 pid:null,
                 commentInputVisible: false,
                 hasNextPage: true,
@@ -68,7 +69,13 @@
             },
             async toCommentInput(pid) {
                 await this.getUserInfo()
-                this.pid = pid
+                if(pid){
+                    this.pid = pid
+                    this.postTargetId = null
+                }else{
+                    this.pid = null
+                    this.postTargetId = this.targetId 
+                }
                 this.commentInputVisible = true
             },
             commit(comment) {
