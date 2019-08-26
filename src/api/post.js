@@ -1,10 +1,7 @@
 import { get, post } from '@/utils/request'
 
-// export const query = function (pageNum,pageSize) {
-//     return get('/post/query?page='+pageNum+'&rows='+pageSize)
-// }
 export const appreciate = function (data) {
-return post('post/appreciate',data)
+    return post('post/appreciate', data)
 }
 export const query = function (data) {
     return post('post/query', data)
