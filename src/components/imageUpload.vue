@@ -41,6 +41,8 @@
         },
         methods: {
             upload(filePath) {
+                console.log(filePath);
+                
                 const uploadTask = uni.uploadFile({
                     url: url_base+'/file/upload',
                     filePath: filePath,

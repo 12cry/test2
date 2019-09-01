@@ -1,9 +1,9 @@
 {
   "pages": [
     {
-      "path": "pages/article/article-view",
+      "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "test",
+        "navigationBarTitleText": "首页",
         "enablePullDownRefresh": false,
         "app-plus": {
           "bounce": "none"
@@ -11,9 +11,9 @@
       }
     },
     {
-      "path": "pages/index/index",
+      "path": "pages/article/article-view",
       "style": {
-        "navigationBarTitleText": "首页",
+        "navigationBarTitleText": "test",
         "enablePullDownRefresh": false,
         "app-plus": {
           "bounce": "none"

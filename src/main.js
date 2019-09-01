@@ -6,6 +6,9 @@ import dateUtil from './utils/dateUtil'
 Vue.prototype.$store = store
 Vue.config.productionTip = false
 Vue.filter('dateFormatFilter', function (value) {
+    if(!value){
+        return ''
+    }
     let d = dateUtil.dateFormat(value,'yyyy-mm-dd HH:MM:ss')
     return d
 })
