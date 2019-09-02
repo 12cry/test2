@@ -5,17 +5,22 @@ import store from './store'
 import dateUtil from './utils/dateUtil'
 Vue.prototype.$store = store
 Vue.config.productionTip = false
-Vue.filter('dateFormatFilter', function (value) {
-    if(!value){
+Vue.filter('dateFormatFilter', function (value, formatType) {
+    if (!value) {
         return ''
     }
-    let d = dateUtil.dateFormat(value,'yyyy-mm-dd HH:MM:ss')
+    console.log(format);
+    let format = 'yyyy-mm-dd'
+    if (formatType == 2) {
+        format = 'yyyy-mm-dd HH:MM:ss'
+    }
+    let d = dateUtil.dateFormat(value, format)
     return d
 })
 App.mpType = 'app'
 
 import cuCustom from './lib/colorui/components/cu-custom.vue'
-Vue.component('cu-custom',cuCustom)
+Vue.component('cu-custom', cuCustom)
 const app = new Vue({
     store,
     ...App

@@ -1,10 +1,12 @@
 <template>
   <commentList :targetId="id">
     <view>
-      <!-- <view class="text-gl padding">{{formData.content}}</view> -->
       <view class="solids-bottom text-center text-black text-bold text-xl padding">{{formData.title}}</view>
+      <view class="margin-sm flex justify-between padding">
+        <view class="text-gray text-df">{{formData.author}}</view>
+        <view class="text-gray text-df">{{formData.publicTime|dateFormatFilter}}</view>
+      </view>
       <rich-text :nodes="formData.content" />
- 
     </view>
   </commentList>
 </template>
@@ -28,8 +30,6 @@ export default {
         };
     },
     created() {
-        console.log('ccccccccc');
-
         queryById(this.id).then(res => {
             this.formData = res.data;
         });
